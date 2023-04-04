@@ -125,16 +125,12 @@ npm run dev
 
 If you want to contact me, you can reach me through below handles.
 
-<<<<<<< HEAD
 [![linkedin](https://img.shields.io/badge/Rutwik_Kalbandhe-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rutwikkalbandhe/)
 [![Twitter](https://img.shields.io/badge/Rutwik_Kalbandhe-20232A?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/Rutwik1/)
-=======
 [![linkedin](https://img.shields.io/badge/Mohit_Sehrawat-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/m-sehrawat/)
 [![Twitter](https://img.shields.io/badge/Mohit_Sehrawat-20232A?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/m-sehrawat/)
 
 © 2023 Rutwik Kalbandhe
-
->>>>>>> 755bfacdda579b2c31d74fcab0c92c0d759cbdf3
 
 © 2023 Rutwik Kalbandhe
 
