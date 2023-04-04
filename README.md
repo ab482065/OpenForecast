@@ -52,12 +52,6 @@ To use the app, type a name of the city and click on search/press Enter or else 
 
 ![weatherapp2](https://user-images.githubusercontent.com/91532881/166334796-48e0faa6-3e3c-46e5-9cd1-857da895379d.png)
 
-<br />
-
-## Demo
-
-https://user-images.githubusercontent.com/91532881/166426542-b271be2e-e7d9-4b3c-bfe7-5e9e51e26be4.mp4
-
 <br/>
 
 ## Getting Started
@@ -127,10 +121,6 @@ If you want to contact me, you can reach me through below handles.
 
 [![linkedin](https://img.shields.io/badge/Rutwik_Kalbandhe-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rutwikkalbandhe/)
 [![Twitter](https://img.shields.io/badge/Rutwik_Kalbandhe-20232A?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/Rutwik1/)
-[![linkedin](https://img.shields.io/badge/Mohit_Sehrawat-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/m-sehrawat/)
-[![Twitter](https://img.shields.io/badge/Mohit_Sehrawat-20232A?style=for-the-badge&logo=Github&logoColor=white)](https://github.com/m-sehrawat/)
-
-© 2023 Rutwik Kalbandhe
 
 © 2023 Rutwik Kalbandhe
 
