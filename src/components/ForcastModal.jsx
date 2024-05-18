@@ -1,67 +1,97 @@
-import { Box, Grid, Icon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
-import { dateFormat } from "../helpers/extraFunctions";
-import { NewText } from "./SmallComponents";
-import { ImSun } from "react-icons/im";
-import { MdOutlineNightsStay } from "react-icons/md";
+import { Box, Flex, Grid, Heading, Icon, Text, useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { celsius } from "../helpers/extraFunctions";
+import { getItem } from "../helpers/sessionStorage";
+import { getWeatherByLocation, syncData } from "../redux/actions";
+import { Error } from "./Error";
+import { Loading } from "./Loading";
+import { Map } from "./Map";
+import { FaSyncAlt } from "react-icons/fa";
+import { Newbox, NewText } from "./SmallComponents";
+import { Forcast } from "./Forcast";
 
+export const Deatils = () => {
+  const { isLoading, weatherData: data, forcastData, isError } = useSelector((state) => state);
+  const [isRotate, setIsRotate] = useState(false);
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const [floodIndicator, setFloodIndicator] = useState(false);
 
-export const ForcastModal = ({ data }) => {
+  useEffect(() => {
+    let weather = getItem("weather");
+    !weather && dispatch(getWeatherByLocation(toast));
+  }, []);
 
-    const { date, day } = dateFormat(data.dt);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleSyncData = () => {
+    setIsRotate(true);
+    dispatch(syncData(data.name, toast));
+  };
 
-    return (
-        <>
-            <Box onClick={onOpen} cursor={'pointer'} mt={'10px'}>
-                <Text color={'#5e82f4'} fontWeight={500} fontSize={'27px'}>
-                    <Icon as={ImSun} /> {Math.round(data.temp.day)}<sup>o</sup> C
-                </Text>
-                <Text color={'#5e82f4'} fontWeight={500} fontSize={'27px'}>
-                    <Icon as={MdOutlineNightsStay} /> {Math.round(data.temp.night)}<sup>o</sup> C
-                </Text>
-                <Text color={'#5e82f4'} fontWeight={500} fontSize={'20px'}>
-                    {data.weather[0].main}
-                </Text>
+  return isLoading ? (
+    <Loading />
+  ) : isError ? (
+    <Error />
+  ) : (
+    <>
+      <Box maxW={'1400px'} m={'20px auto 5px'} p={'20px'} minH={'550px'}>
+        <Grid gridTemplateColumns={['100%', 'repeat(2, 1fr)', 'repeat(2, 1fr)', '30% 27.5% 38%']} gap={'30px'}>
+          <Newbox>
+            <Box color={'#5e82f4'} p={'20px'} textAlign={'center'}>
+              <Flex justify={'end'}>
+                <Icon
+                  onClick={handleSyncData}
+                  onAnimationEnd={() => { setIsRotate(false) }}
+                  className={isRotate ? "iconRotate" : undefined}
+                  cursor={'pointer'} w={'23px'} h={'23px'} as={FaSyncAlt}
+                />
+              </Flex>
+              <Heading>{data.name}</Heading>
+              <Heading fontSize={['100px', '120px', '120px', '100px', '120px']}>{Math.round(data.main.temp - 273)}<sup>o</sup>C</Heading>
+              <Heading>{data.weather[0].main}</Heading>
             </Box>
+          </Newbox>
 
-            <Modal isOpen={isOpen} onClose={onClose} >
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader></ModalHeader>
-                    <ModalCloseButton />
+          <Newbox>
+            <Grid templateColumns={'50% 50%'} h={'100%'} p={'8px'}>
+              <Box py={'10px'} pl={'15%'}>
+                {['Felt Temp.', 'Humidity', 'Wind', 'Visibility', 'Max Temp.', 'Min Temp.'].map((e, i) => (
+                  <Text key={i} color={'#5e82f4'} fontWeight={500} mt={'15px'} fontSize={'18px'} >{e}</Text>
+                ))}
+              </Box>
+              <Box borderRadius={'30px'} bg={'#5e82f4'} py={'10px'} pl={'15%'}>
+                <NewText>{celsius(data.main.feels_like)}<sup>o</sup> C</NewText>
+                <NewText>{data.main.humidity}%</NewText>
+                <NewText>{(data.wind.speed * 3.6).toFixed(2)} Km/h</NewText>
+                <NewText>{(data.visibility * 0.001).toFixed(2)} Km</NewText>
+                <NewText>{celsius(data.main.temp_max)}<sup>o</sup> C</NewText>
+                <NewText>{celsius(data.main.temp_min)}<sup>o</sup> C</NewText>
+              </Box>
+            </Grid>
+          </Newbox>
 
-                    <ModalBody>
-                        <Box p={'10px'}>
-                            <Box p={'5px'} bg={'#5e82f4'} textAlign={'center'} borderRadius={'30px'} mb={'20px'} >
-                                <Text fontWeight={500} color={'white'} fontSize={'18px'}>{date}</Text>
-                                <Text fontWeight={500} color={'white'} fontSize={'18px'}>{day}</Text>
-                            </Box>
+          <Newbox>
+            <Map city={data.name} />
+          </Newbox>
 
-                            <Grid templateColumns={'50% 50%'} >
-                                <Box pb={'10px'} pl={'15%'}>
-                                    {['Felt Temp.', 'Humidity', 'Wind', 'Pressure', 'Day Temp.', 'Evening Temp.', 'Night Temp.', 'Max Temp.', 'Min Temp.'].map((e, i) => (
-                                        <Text key={i} color={'#5e82f4'} fontWeight={500} mt={'15px'} fontSize={'18px'} >{e}</Text>
-                                    ))}
-                                </Box>
-                                <Box borderRadius={'30px'} bg={'#5e82f4'} pb={'10px'} pl={'15%'}>
-                                    <NewText>{data.feels_like.day}<sup>o</sup> C</NewText>
-                                    <NewText>{data.humidity}%</NewText>
-                                    <NewText>{(data.wind_speed * 3.6).toFixed(2)} Km/h</NewText>
-                                    <NewText>{data.pressure} hPa</NewText>
-                                    <NewText>{data.temp.day}<sup>o</sup> C</NewText>
-                                    <NewText>{data.temp.eve}<sup>o</sup> C</NewText>
-                                    <NewText>{data.temp.night}<sup>o</sup> C</NewText>
-                                    <NewText>{data.temp.min}<sup>o</sup> C</NewText>
-                                    <NewText>{data.temp.max}<sup>o</sup> C</NewText>
-                                </Box>
-                            </Grid>
-                        </Box>
-                    </ModalBody>
+          {floodIndicator ? (
+            <Box
+              bg={'#FF69B4'}
+              p={'10px'}
+              borderRadius={'10px'}
+              fontSize={'18px'}
+              fontWeight={600}
+              textAlign={'center'}
+            >
+              Flood indicator: YES
+            </Box>
+          ) : null}
 
-                    <ModalFooter></ModalFooter>
-                </ModalContent>
-            </Modal>
-        </>
-    );
+          <Grid mt={'40px'} templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)', 'repeat(5, 1fr)', 'repeat(8, 1fr)']} gap={'20px'}>
+            {forcastData.map((e, i) => <Forcast key={i} data={e} />)}
+          </Grid>
+        </Grid>
+      </Box>
+    </>
+  );
 };
-
